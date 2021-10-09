@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.0)
 project(ddsp_external)
 
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/modules)
 find_package(Torch REQUIRED)
+find_package(MKLDNN REQUIRED)
 
 if (APPLE)
 set(CMAKE_CXX_COMPILER "clang++")
@@ -19,7 +21,7 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 add_library(ddsp_tilde SHARED ddsp_tilde/ddsp_tilde.cpp ddsp_tilde/ddsp_model.cpp)
-target_link_libraries(ddsp_tilde PUBLIC "${TORCH_LIBRARIES}")
+target_link_libraries(ddsp_tilde PUBLIC ${TORCH_LIBRARIES} ${MKLDNN_LIBRARY})
 set_target_properties(ddsp_tilde PROPERTIES PREFIX "" OUTPUT_NAME "ddsp~" SUFFIX "${EXTERNAL_SUFFIX}")
 set_property(TARGET ddsp_tilde PROPERTY CXX_STANDARD 14)
 
